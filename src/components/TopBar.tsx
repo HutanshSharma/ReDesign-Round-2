@@ -23,12 +23,6 @@ export default function TopBar() {
             {dateTime.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
           </span>
         </div>
-        
-        <div className="hidden lg:flex items-center gap-4 text-white/60">
-          <span className="hover:text-white cursor-help transition-colors">Help & Support</span>
-          <span className="w-1 h-1 rounded-full bg-white/20"></span>
-          <span className="hover:text-white cursor-pointer transition-colors">Contact Us</span>
-        </div>
       </div>
       
       <div className="flex items-center gap-3 md:gap-6">

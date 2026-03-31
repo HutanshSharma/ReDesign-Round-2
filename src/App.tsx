@@ -16,6 +16,11 @@ import Alerts from './pages/Alerts';
 import ContactUs from './pages/ContactUs';
 import EWallet from './pages/EWallet';
 import EPantry from './pages/EPantry';
+import TrainSearchResults from './pages/TrainSearchResults';
+import PNREnquiry from './pages/PNREnquiry';
+import TrackYourTrain from './pages/TrackYourTrain';
+import CancelETicket from './pages/CancelETicket';
+import TrainSchedule from './pages/TrainSchedule';
 import { TrainFront, Zap, Shield, Utensils } from 'lucide-react';
 
 export default function App() {
@@ -29,13 +34,13 @@ export default function App() {
           label: "Trains", 
           ariaLabel: "Book Trains",
           subLinks: [
-            { label: "Book Ticket", href: "/train-service/book-ticket" },
+            { label: "Book Ticket", href: "/train-search-results" },
             { label: "Foreign Tourist Booking", href: "/train-service/foreign-tourist-booking" },
             { label: "Connecting Journey Booking", href: "/train-service/connecting-journey-booking" },
-            { label: "Cancel E-Ticket", href: "/train-service/cancel-e-ticket" },
-            { label: "PNR Enquiry", href: "/train-service/pnr-enquiry" },
-            { label: "Train Schedule", href: "/train-service/train-schedule" },
-            { label: "Track Your Train", href: "/train-service/track-your-train" },
+            { label: "Cancel E-Ticket", href: "/cancel-ticket" },
+            { label: "PNR Enquiry", href: "/pnr-enquiry" },
+            { label: "Train Schedule", href: "/train-schedule" },
+            { label: "Track Your Train", href: "/track-train" },
             { label: "FTR Coach/Train Booking", href: "/train-service/ftr-coach-train-booking" },
             { label: "Dogs/Cats Booking", href: "/train-service/dogs-cats-booking" },
             { label: "Link Your Aadhaar", href: "/train-service/link-your-aadhaar" },
@@ -227,6 +232,11 @@ export default function App() {
             </main>
           } />
           <Route path="/train-service/:serviceId" element={<TrainServicePage />} />
+          <Route path="/train-search-results" element={<TrainSearchResults />} />
+          <Route path="/pnr-enquiry" element={<PNREnquiry />} />
+          <Route path="/track-train" element={<TrackYourTrain />} />
+          <Route path="/cancel-ticket" element={<CancelETicket />} />
+          <Route path="/train-schedule" element={<TrainSchedule />} />
           <Route path="/auth" element={<LoginRegister />} />
           <Route path="/other-services" element={<OtherServices />} />
           <Route path="/alerts" element={<Alerts />} />

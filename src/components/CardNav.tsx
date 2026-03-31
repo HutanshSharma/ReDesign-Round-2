@@ -249,6 +249,12 @@ const CardNav = ({
 
             <button
               type="button"
+              onClick={() => {
+                const searchCard = document.getElementById('search-card');
+                if (searchCard) {
+                  searchCard.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="card-nav-cta-button hidden md:inline-flex border-0 rounded-xl px-6 items-center h-[44px] font-bold cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-blue-100"
               style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
             >

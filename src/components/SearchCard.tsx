@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { MapPin, ArrowUpDown, Calendar, Users, Search, History } from 'lucide-react';
 
 export default function SearchCard() {
+  const navigate = useNavigate();
   const [from, setFrom] = useState('New Delhi (NDLS)');
   const [to, setTo] = useState('Mumbai Central (MMCT)');
   const swapBtnRef = useRef<HTMLButtonElement>(null);
@@ -37,7 +39,7 @@ export default function SearchCard() {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto px-4 relative z-10">
+    <div id="search-card" className="w-full max-w-lg mx-auto px-4 relative z-10">
       <div className="bg-white/80 backdrop-blur-2xl rounded-[2rem] p-4 md:p-6 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.12)] border border-white/60">
         <div className="space-y-4">
           {/* Destination Selection */}
@@ -120,6 +122,7 @@ export default function SearchCard() {
           <div className="pt-1">
             <button 
               onMouseDown={handleButtonPress}
+              onClick={() => navigate('/train-search-results')}
               className="w-full bg-gradient-to-r from-[#F27D26] to-[#ff9d52] hover:from-[#e06d1b] hover:to-[#f27d26] text-white py-4 rounded-2xl text-lg font-black uppercase tracking-widest shadow-[0_12px_24px_-8px_rgba(242,125,38,0.4)] transition-all flex items-center justify-center gap-3 group"
             >
               <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />

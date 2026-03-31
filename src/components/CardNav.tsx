@@ -44,6 +44,8 @@ const CardNav = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isQuickMenuOpen, setIsQuickMenuOpen] = useState(false);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
+  const [submenuPos, setSubmenuPos] = useState({ top: 0, left: 0 });
   const navRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
@@ -188,8 +190,8 @@ const CardNav = ({
       >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? 'open' : ''} block h-[60px] p-0 rounded-2xl shadow-xl relative overflow-hidden will-change-[height]`}
-        style={{ backgroundColor: baseColor }}
+        className={`card-nav ${isExpanded ? 'open' : ''} block h-[60px] p-0 rounded-2xl shadow-xl relative will-change-[height]`}
+        style={{ backgroundColor: baseColor, overflow: isExpanded ? 'visible' : 'hidden' }}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
@@ -212,9 +214,13 @@ const CardNav = ({
             />
           </div>
 
-          <div className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none hover:opacity-80 transition-opacity"
+          >
             {logo}
-          </div>
+          </Link>
 
           <div className="flex items-center gap-2">
             <button 
@@ -255,6 +261,7 @@ const CardNav = ({
           className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-3 flex flex-col items-stretch gap-3 justify-start z-[1] ${
             isExpanded ? 'visible pointer-events-auto' : 'invisible pointer-events-none'
           } md:flex-row md:items-stretch md:gap-[12px]`}
+          style={{ overflow: 'visible' }}
           aria-hidden={!isExpanded}
         >
           {(items || []).slice(0, 3).map((item, idx) => (
@@ -262,14 +269,30 @@ const CardNav = ({
               key={`${item.label}-${idx}`}
               className="nav-card select-none relative flex flex-col gap-3 p-[20px_24px] rounded-xl min-w-0 flex-[1_1_auto] h-auto min-h-[80px] md:h-full md:min-h-0 md:flex-[1_1_0%] shadow-sm"
               ref={setCardRef(idx)}
-              style={{ backgroundColor: item.bgColor, color: item.textColor }}
+              style={{ backgroundColor: item.bgColor, color: item.textColor, overflow: 'visible' }}
             >
               <div className="nav-card-label font-black tracking-tighter text-[22px] md:text-[26px] uppercase">
                 {item.label}
               </div>
               <div className="nav-card-links mt-auto flex flex-col gap-[6px]">
                 {item.links?.map((lnk, i) => (
-                  <div key={`${lnk.label}-${i}`} className="relative group/link">
+                  <div 
+                    key={`${lnk.label}-${i}`} 
+                    className="relative group/link"
+                    onMouseEnter={(e) => {
+                      if (lnk.subLinks) {
+                        const rect = (e.currentTarget.querySelector('.nav-card-link') as HTMLElement)?.getBoundingClientRect();
+                        if (rect) {
+                          setActiveSubmenu(`${lnk.label}-${i}`);
+                          setSubmenuPos({
+                            top: rect.bottom + 8,
+                            left: rect.left
+                          });
+                        }
+                      }
+                    }}
+                    onMouseLeave={() => setActiveSubmenu(null)}
+                  >
                     {lnk.subLinks ? (
                       <div className="nav-card-link inline-flex items-center gap-[8px] no-underline cursor-pointer transition-all duration-300 hover:translate-x-1 hover:opacity-80 text-[16px] md:text-[18px] font-medium">
                         <ArrowUpRight className="nav-card-link-icon shrink-0 w-4 h-4" aria-hidden="true" />
@@ -287,22 +310,6 @@ const CardNav = ({
                         {lnk.label}
                       </Link>
                     )}
-
-                    {lnk.subLinks && (
-                      <div className="absolute left-0 top-full mt-2 w-[320px] md:w-[480px] bg-white rounded-2xl shadow-2xl border border-slate-100 opacity-0 invisible group-hover/link:opacity-100 group-hover/link:visible transition-all duration-300 z-[100] p-3 grid grid-cols-2 gap-1">
-                        {lnk.subLinks.map((sub, j) => (
-                          <Link
-                            key={`${sub.label}-${j}`}
-                            to={sub.href || '#'}
-                            onClick={closeMenu}
-                            className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 text-slate-700 font-bold text-[13px] transition-colors group/sub"
-                          >
-                            <span className="truncate">{sub.label}</span>
-                            <ArrowUpRight className="w-3 h-3 opacity-0 group-hover/sub:opacity-100 transition-opacity shrink-0" />
-                          </Link>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -311,6 +318,43 @@ const CardNav = ({
         </div>
       </nav>
     </div>
+
+    {/* Fixed Position Submenu */}
+    <AnimatePresence>
+      {activeSubmenu && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="fixed w-[320px] md:w-[480px] bg-white rounded-2xl shadow-2xl border border-slate-100 z-[9999] p-3 grid grid-cols-2 gap-1 pointer-events-auto"
+          style={{
+            top: `${submenuPos.top}px`,
+            left: `${submenuPos.left}px`
+          }}
+          onMouseEnter={() => setActiveSubmenu(activeSubmenu)}
+          onMouseLeave={() => setActiveSubmenu(null)}
+        >
+          {items.flatMap(item => 
+            item.links
+              .filter(lnk => lnk.subLinks)
+              .find(lnk => activeSubmenu.includes(lnk.label))?.subLinks || []
+          ).map((sub, j) => (
+            <Link
+              key={`${sub.label}-${j}`}
+              to={sub.href || '#'}
+              onClick={() => {
+                closeMenu();
+                setActiveSubmenu(null);
+              }}
+              className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 text-slate-700 font-bold text-[13px] transition-colors"
+            >
+              <span className="truncate">{sub.label}</span>
+              <ArrowUpRight className="w-3 h-3 opacity-0 hover:opacity-100 transition-opacity shrink-0" />
+            </Link>
+          ))}
+        </motion.div>
+      )}
+    </AnimatePresence>
 
     {/* Floating Toggle Button (Visible when navbar is hidden) */}
     <AnimatePresence>

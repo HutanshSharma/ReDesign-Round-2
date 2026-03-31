@@ -10,6 +10,7 @@ import Holidays from './components/Holidays';
 import CardSwap, { Card } from './components/CardSwap';
 import Footer from './components/Footer';
 import TrainServicePage from './pages/TrainServicePage';
+import LoginRegister from './pages/LoginRegister';
 import { TrainFront, Zap, Shield, Utensils } from 'lucide-react';
 
 export default function App() {
@@ -37,8 +38,23 @@ export default function App() {
             { label: "IRCTC Official Mobile Apps", href: "/train-service/irctc-official-mobile-apps" }
           ]
         },
-        { label: "Meals", ariaLabel: "Order Meals", href: "#" },
-        { label: "E-Wallet", ariaLabel: "IRCTC E-Wallet", href: "#" }
+        { 
+          label: "Meals", 
+          ariaLabel: "Order Meals",
+          subLinks: [
+            { label: "Book Food - E-Pantry", href: "/meals/e-pantry" },
+            { label: "Order Food - E-Catering", href: "/meals/e-catering" },
+            { label: "Cooked Food Menu", href: "/meals/cooked-food-menu" }
+          ]
+        },
+        { 
+          label: "E-Wallet", 
+          ariaLabel: "IRCTC E-Wallet",
+          subLinks: [
+            { label: "About IRCTC eWallet", href: "/e-wallet/about" },
+            { label: "IRCTC eWallet User Guide", href: "/e-wallet/user-guide" }
+          ]
+        }
       ]
     },
     {
@@ -56,8 +72,8 @@ export default function App() {
       bgColor: "#F27D26", 
       textColor: "#fff",
       links: [
-        { label: "Login", ariaLabel: "User Login" },
-        { label: "Register", ariaLabel: "Create Account" }
+        { label: "Login", ariaLabel: "User Login", href: "/auth" },
+        { label: "Register", ariaLabel: "Create Account", href: "/auth" }
       ]
     }
   ];
@@ -211,6 +227,7 @@ export default function App() {
             </main>
           } />
           <Route path="/train-service/:serviceId" element={<TrainServicePage />} />
+          <Route path="/auth" element={<LoginRegister />} />
         </Routes>
 
         {/* Mobile Bottom Nav */}

@@ -11,6 +11,11 @@ import CardSwap, { Card } from './components/CardSwap';
 import Footer from './components/Footer';
 import TrainServicePage from './pages/TrainServicePage';
 import LoginRegister from './pages/LoginRegister';
+import OtherServices from './pages/OtherServices';
+import Alerts from './pages/Alerts';
+import ContactUs from './pages/ContactUs';
+import EWallet from './pages/EWallet';
+import EPantry from './pages/EPantry';
 import { TrainFront, Zap, Shield, Utensils } from 'lucide-react';
 
 export default function App() {
@@ -42,18 +47,13 @@ export default function App() {
           label: "Meals", 
           ariaLabel: "Order Meals",
           subLinks: [
-            { label: "Book Food - E-Pantry", href: "/meals/e-pantry" },
-            { label: "Order Food - E-Catering", href: "/meals/e-catering" },
-            { label: "Cooked Food Menu", href: "/meals/cooked-food-menu" }
+            { label: "Book Food - E-Pantry", href: "/meals/e-pantry" }
           ]
         },
         { 
           label: "E-Wallet", 
           ariaLabel: "IRCTC E-Wallet",
-          subLinks: [
-            { label: "About IRCTC eWallet", href: "/e-wallet/about" },
-            { label: "IRCTC eWallet User Guide", href: "/e-wallet/user-guide" }
-          ]
+          href: "/e-wallet"
         }
       ]
     },
@@ -62,9 +62,9 @@ export default function App() {
       bgColor: "#170D27",
       textColor: "#fff",
       links: [
-        { label: "Alerts", ariaLabel: "Travel Alerts" },
-        { label: "Other services", ariaLabel: "Other Services" },
-        { label: "Contact us", ariaLabel: "Contact Support" }
+        { label: "Alerts", ariaLabel: "Travel Alerts", href: "/alerts" },
+        { label: "Other services", ariaLabel: "Other Services", href: "/other-services" },
+        { label: "Contact us", ariaLabel: "Contact Support", href: "/contact-us" }
       ]
     },
     {
@@ -228,6 +228,11 @@ export default function App() {
           } />
           <Route path="/train-service/:serviceId" element={<TrainServicePage />} />
           <Route path="/auth" element={<LoginRegister />} />
+          <Route path="/other-services" element={<OtherServices />} />
+          <Route path="/alerts" element={<Alerts />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/e-wallet" element={<EWallet />} />
+          <Route path="/meals/e-pantry" element={<EPantry />} />
         </Routes>
 
         {/* Mobile Bottom Nav */}
